@@ -1,4 +1,3 @@
-live link : https://finance-tracker-snowy-pi.vercel.app/
 # 🏦 Professional Finance Tracker
 
 A comprehensive full-stack finance management application with **Role-Based Access Control (RBAC)**, built with React, Node.js, PostgreSQL, and Redis.
@@ -229,6 +228,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ✅ **Comprehensive API Documentation**  
 ✅ **Production-Ready Architecture**  
 ✅ **Modern React Best Practices**  
+
+live link : https://finance-tracker-snowy-pi.vercel.app/
 
 ---
 

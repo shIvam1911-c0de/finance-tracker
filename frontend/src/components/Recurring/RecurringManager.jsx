@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '../../services/api';
 import { CurrencySelector, formatCurrency } from '../Common/CurrencySelector';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
 
 const FREQUENCIES = [
   { value: 'daily', label: 'Daily' },
@@ -17,8 +16,7 @@ export const RecurringManager = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const { canModify } = useAuth();
-  const { isDark } = useTheme();
-
+  
   const [formData, setFormData] = useState({
     account_id: '',
     type: 'expense',
@@ -100,12 +98,12 @@ export const RecurringManager = () => {
     return FREQUENCIES.find(f => f.value === freq)?.label || freq;
   };
 
-  if (loading) return <div className={isDark ? 'text-white' : 'text-gray-900'}>Loading recurring transactions...</div>;
+  if (loading) return <div className="text-gray-900 dark:text-white">Loading recurring transactions...</div>;
 
   return (
-    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+    <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>🔄 Recurring Transactions</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">🔄 Recurring Transactions</h1>
         {canModify() && (
           <button
             onClick={() => setShowForm(true)}
@@ -119,7 +117,7 @@ export const RecurringManager = () => {
       {/* Recurring Transactions List */}
       <div className="grid gap-4">
         {recurring.map((item) => (
-          <div key={item.id} className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-4`}>
+          <div key={item.id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
             <div className="flex justify-between items-start">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
@@ -130,31 +128,31 @@ export const RecurringManager = () => {
                   }`}>
                     {item.type}
                   </span>
-                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.category}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{item.category}</h3>
                 </div>
                 
-                <p className={`mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{item.description}</p>
+                <p className="mb-2 text-gray-600 dark:text-gray-300">{item.description}</p>
                 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>Amount:</span>
-                    <span className={`ml-2 font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <span className="text-gray-500 dark:text-gray-400">Amount:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
                       {formatCurrency(item.amount, item.currency)}
                     </span>
                   </div>
                   <div>
-                    <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>Frequency:</span>
-                    <span className={`ml-2 font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <span className="text-gray-500 dark:text-gray-400">Frequency:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
                       {getFrequencyLabel(item.frequency)}
                     </span>
                   </div>
                   <div>
-                    <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>Account:</span>
-                    <span className={`ml-2 font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.account_name}</span>
+                    <span className="text-gray-500 dark:text-gray-400">Account:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-white">{item.account_name}</span>
                   </div>
                   <div>
-                    <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>Next:</span>
-                    <span className={`ml-2 font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <span className="text-gray-500 dark:text-gray-400">Next:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
                       {new Date(item.next_execution).toLocaleDateString()}
                     </span>
                   </div>
@@ -176,24 +174,24 @@ export const RecurringManager = () => {
 
       {recurring.length === 0 && (
         <div className="text-center py-12">
-          <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No recurring transactions</p>
-          <p className={isDark ? 'text-gray-500' : 'text-gray-400'}>Set up automatic income or expenses</p>
+          <p className="text-lg text-gray-500 dark:text-gray-400">No recurring transactions</p>
+          <p className="text-gray-400 dark:text-gray-500">Set up automatic income or expenses</p>
         </div>
       )}
 
       {/* Add Recurring Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg p-6 w-96 max-h-[90vh] overflow-y-auto`}>
-            <h2 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Add Recurring Transaction</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-96 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Add Recurring Transaction</h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Account</label>
+                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Account</label>
                 <select
                   value={formData.account_id}
                   onChange={(e) => setFormData({...formData, account_id: e.target.value})}
-                  className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                   required
                 >
                   <option value="">Select Account</option>
@@ -206,11 +204,11 @@ export const RecurringManager = () => {
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Type</label>
+                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Type</label>
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({...formData, type: e.target.value})}
-                  className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                 >
                   <option value="income">Income</option>
                   <option value="expense">Expense</option>
@@ -218,12 +216,12 @@ export const RecurringManager = () => {
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Category</label>
+                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Category</label>
                 <input
                   type="text"
                   value={formData.category}
                   onChange={(e) => setFormData({...formData, category: e.target.value})}
-                  className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                   placeholder="e.g., Salary, Rent"
                   required
                 />
@@ -231,18 +229,18 @@ export const RecurringManager = () => {
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Amount</label>
+                  <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
                   <input
                     type="number"
                     step="0.01"
                     value={formData.amount}
                     onChange={(e) => setFormData({...formData, amount: e.target.value})}
-                    className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                    className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                     required
                   />
                 </div>
                 <div>
-                  <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Currency</label>
+                  <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Currency</label>
                   <CurrencySelector
                     value={formData.currency}
                     onChange={(currency) => setFormData({...formData, currency})}
@@ -252,11 +250,11 @@ export const RecurringManager = () => {
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Frequency</label>
+                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Frequency</label>
                 <select
                   value={formData.frequency}
                   onChange={(e) => setFormData({...formData, frequency: e.target.value})}
-                  className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                 >
                   {FREQUENCIES.map(freq => (
                     <option key={freq.value} value={freq.value}>
@@ -267,23 +265,23 @@ export const RecurringManager = () => {
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Description</label>
+                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Description</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                   rows="2"
                   placeholder="Optional description"
                 />
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Start Date</label>
+                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Start Date</label>
                 <input
                   type="date"
                   value={formData.start_date}
                   onChange={(e) => setFormData({...formData, start_date: e.target.value})}
-                  className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                   required
                 />
               </div>

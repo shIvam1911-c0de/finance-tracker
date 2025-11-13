@@ -14,9 +14,8 @@ exports.getFinancialReport = async (req, res) => {
             FROM transactions 
             WHERE user_id = $1 
                 AND date BETWEEN $2 AND $3
-                AND currency = $4
             GROUP BY type
-        `, [req.user.id, startDate, endDate, currency]);
+        `, [req.user.id, startDate, endDate]);
         
         // Category breakdown
         const categoryBreakdown = await pool.query(`
@@ -28,10 +27,9 @@ exports.getFinancialReport = async (req, res) => {
             FROM transactions 
             WHERE user_id = $1 
                 AND date BETWEEN $2 AND $3
-                AND currency = $4
             GROUP BY category, type
             ORDER BY total DESC
-        `, [req.user.id, startDate, endDate, currency]);
+        `, [req.user.id, startDate, endDate]);
         
         // Monthly trends
         const monthlyTrends = await pool.query(`
@@ -42,10 +40,9 @@ exports.getFinancialReport = async (req, res) => {
             FROM transactions 
             WHERE user_id = $1 
                 AND date BETWEEN $2 AND $3
-                AND currency = $4
             GROUP BY TO_CHAR(date, 'YYYY-MM'), type
             ORDER BY month
-        `, [req.user.id, startDate, endDate, currency]);
+        `, [req.user.id, startDate, endDate]);
         
         // Account balances
         const accountBalances = await pool.query(`
@@ -53,14 +50,10 @@ exports.getFinancialReport = async (req, res) => {
                 a.name,
                 a.type,
                 a.currency,
-                a.balance,
-                COALESCE(SUM(CASE WHEN t.type = 'income' THEN t.amount ELSE -t.amount END), 0) as transaction_balance
+                a.balance
             FROM accounts a
-            LEFT JOIN transactions t ON a.id = t.account_id 
-                AND t.date BETWEEN $2 AND $3
             WHERE a.user_id = $1 AND a.is_active = true
-            GROUP BY a.id, a.name, a.type, a.currency, a.balance
-        `, [req.user.id, startDate, endDate]);
+        `, [req.user.id]);
         
         const report = {
             period: { startDate, endDate },
@@ -110,10 +103,9 @@ exports.getTaxReport = async (req, res) => {
             FROM transactions 
             WHERE user_id = $1 
                 AND EXTRACT(YEAR FROM date) = $2
-                AND currency = $3
             GROUP BY category
             ORDER BY (income + expenses) DESC
-        `, [req.user.id, year, currency]);
+        `, [req.user.id, year]);
         
         const summary = await pool.query(`
             SELECT 
@@ -122,8 +114,7 @@ exports.getTaxReport = async (req, res) => {
             FROM transactions 
             WHERE user_id = $1 
                 AND EXTRACT(YEAR FROM date) = $2
-                AND currency = $3
-        `, [req.user.id, year, currency]);
+        `, [req.user.id, year]);
         
         res.json({
             year: parseInt(year),

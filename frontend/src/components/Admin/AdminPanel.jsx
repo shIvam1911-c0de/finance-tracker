@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
 
 export const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const { hasRole } = useAuth();
-  const { isDark } = useTheme();
-
+  
   useEffect(() => {
     if (hasRole('admin')) {
       fetchUsers();
@@ -51,29 +49,29 @@ export const AdminPanel = () => {
     return <div className="text-red-500">Access Denied: Admin Only</div>;
   }
 
-  if (loading) return <div className={isDark ? 'text-white' : 'text-gray-900'}>Loading users...</div>;
+  if (loading) return <div className="text-gray-900 dark:text-white">Loading users...</div>;
 
   return (
-    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
-      <h1 className={`text-3xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Admin Panel</h1>
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Admin Panel</h1>
       
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow overflow-hidden`}>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         <table className="w-full">
-          <thead className={isDark ? 'bg-gray-700' : 'bg-gray-50'}>
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>ID</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>Username</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>Email</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>Role</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">ID</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">Username</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">Email</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">Role</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">Actions</th>
             </tr>
           </thead>
-          <tbody className={`divide-y ${isDark ? 'divide-gray-600' : 'divide-gray-200'}`}>
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
             {users.map((user) => (
               <tr key={user.id}>
-                <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{user.id}</td>
-                <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{user.username}</td>
-                <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{user.email}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{user.id}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{user.username}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{user.email}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 py-1 text-xs rounded-full ${
                     user.role === 'admin' ? 'bg-red-100 text-red-800' :
@@ -88,7 +86,7 @@ export const AdminPanel = () => {
                     <select
                       value={user.role}
                       onChange={(e) => updateUserRole(user.id, e.target.value)}
-                      className={`border rounded px-2 py-1 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                      className="border rounded px-2 py-1 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                     >
                       <option value="admin">Admin</option>
                       <option value="user">User</option>
@@ -96,11 +94,7 @@ export const AdminPanel = () => {
                     </select>
                     <button
                       onClick={() => deleteUser(user.id, user.username)}
-                      className={`px-3 py-1 text-sm rounded transition-colors ${
-                        isDark 
-                          ? 'bg-red-600 hover:bg-red-700 text-white' 
-                          : 'bg-red-100 hover:bg-red-200 text-red-700'
-                      }`}
+                      className="px-3 py-1 text-sm rounded transition-colors bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-600 dark:hover:bg-red-700 dark:text-white"
                     >
                       Delete
                     </button>

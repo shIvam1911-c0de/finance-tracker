@@ -15,14 +15,10 @@ exports.getAccounts = async (req, res) => {
         }
 
         const result = await pool.query(`
-            SELECT 
-                a.*,
-                COALESCE(SUM(CASE WHEN t.type = 'income' THEN t.amount ELSE -t.amount END), 0) as calculated_balance
-            FROM accounts a
-            LEFT JOIN transactions t ON a.id = t.account_id
-            WHERE a.user_id = $1 AND a.is_active = true
-            GROUP BY a.id
-            ORDER BY a.created_at DESC
+            SELECT *
+            FROM accounts
+            WHERE user_id = $1 AND is_active = true
+            ORDER BY created_at DESC
         `, [req.user.id]);
         
         await setCache(cacheKey, JSON.stringify(result.rows), 1800); // 30 min cache
@@ -76,17 +72,7 @@ exports.deleteAccount = async (req, res) => {
     try {
         const { id } = req.params;
         
-        // Check if account has transactions
-        const transactionCheck = await pool.query(
-            'SELECT COUNT(*) FROM transactions WHERE account_id = $1',
-            [id]
-        );
-        
-        if (parseInt(transactionCheck.rows[0].count) > 0) {
-            return res.status(400).json({ 
-                error: 'Cannot delete account with existing transactions' 
-            });
-        }
+
         
         const result = await pool.query(
             'DELETE FROM accounts WHERE id = $1 AND user_id = $2 RETURNING *',

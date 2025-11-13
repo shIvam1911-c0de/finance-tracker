@@ -1,11 +1,9 @@
 import { useState, useCallback } from 'react';
 import { api } from '../../services/api';
 import { CurrencySelector, formatCurrency } from '../Common/CurrencySelector';
-import { useTheme } from '../../contexts/ThemeContext';
 
 export const ReportsManager = () => {
-  const { isDark } = useTheme();
-  const [reportData, setReportData] = useState(null);
+    const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [reportType, setReportType] = useState('financial');
 
@@ -77,18 +75,18 @@ export const ReportsManager = () => {
   };
 
   return (
-    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
-      <h1 className={`text-3xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>📊 Advanced Reports</h1>
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">📊 Advanced Reports</h1>
 
       {/* Report Controls */}
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6 mb-6`}>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <div>
-            <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Report Type</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Report Type</label>
             <select
               value={reportType}
               onChange={(e) => setReportType(e.target.value)}
-              className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+              className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
             >
               <option value="financial">Financial Report</option>
               <option value="tax">Tax Report</option>
@@ -99,21 +97,21 @@ export const ReportsManager = () => {
           {reportType === 'financial' && (
             <>
               <div>
-                <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Start Date</label>
+                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Start Date</label>
                 <input
                   type="date"
                   value={filters.startDate}
                   onChange={(e) => setFilters({...filters, startDate: e.target.value})}
-                  className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                 />
               </div>
               <div>
-                <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>End Date</label>
+                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">End Date</label>
                 <input
                   type="date"
                   value={filters.endDate}
                   onChange={(e) => setFilters({...filters, endDate: e.target.value})}
-                  className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                 />
               </div>
             </>
@@ -121,12 +119,12 @@ export const ReportsManager = () => {
 
           {reportType === 'tax' && (
             <div>
-              <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Year</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Year</label>
               <input
                 type="number"
                 value={filters.year}
                 onChange={(e) => setFilters({...filters, year: parseInt(e.target.value)})}
-                className={`w-full border rounded px-3 py-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                className="w-full border rounded px-3 py-2 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 border-gray-600 text-white"
                 min="2020"
                 max={new Date().getFullYear()}
               />
@@ -135,7 +133,7 @@ export const ReportsManager = () => {
 
           {(reportType === 'financial' || reportType === 'tax') && (
             <div>
-              <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Currency</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Currency</label>
               <CurrencySelector
                 value={filters.currency}
                 onChange={(currency) => setFilters({...filters, currency})}
@@ -171,20 +169,20 @@ export const ReportsManager = () => {
           {/* Financial Report */}
           {reportType === 'financial' && (
             <>
-              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6`}>
-                <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Financial Summary</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Financial Summary</h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-green-600">
                       {formatCurrency(reportData.summary.totalIncome, filters.currency)}
                     </p>
-                    <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Total Income</p>
+                    <p className="text-gray-600 dark:text-gray-300">Total Income</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-red-600">
                       {formatCurrency(reportData.summary.totalExpenses, filters.currency)}
                     </p>
-                    <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Total Expenses</p>
+                    <p className="text-gray-600 dark:text-gray-300">Total Expenses</p>
                   </div>
                   <div className="text-center">
                     <p className={`text-2xl font-bold ${
@@ -192,33 +190,33 @@ export const ReportsManager = () => {
                     }`}>
                       {formatCurrency(reportData.summary.netIncome, filters.currency)}
                     </p>
-                    <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Net Income</p>
+                    <p className="text-gray-600 dark:text-gray-300">Net Income</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-blue-600">
                       {reportData.summary.transactionCount}
                     </p>
-                    <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Transactions</p>
+                    <p className="text-gray-600 dark:text-gray-300">Transactions</p>
                   </div>
                 </div>
               </div>
 
-              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6`}>
-                <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Category Breakdown</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Category Breakdown</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className={`border-b ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
-                        <th className={`text-left py-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Category</th>
-                        <th className={`text-left py-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Type</th>
-                        <th className={`text-right py-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Amount</th>
-                        <th className={`text-right py-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Count</th>
+                      <tr className="border-b border-gray-200 dark:border-gray-600">
+                        <th className="text-left py-2 text-gray-700 dark:text-gray-300">Category</th>
+                        <th className="text-left py-2 text-gray-700 dark:text-gray-300">Type</th>
+                        <th className="text-right py-2 text-gray-700 dark:text-gray-300">Amount</th>
+                        <th className="text-right py-2 text-gray-700 dark:text-gray-300">Count</th>
                       </tr>
                     </thead>
                     <tbody>
                       {reportData.categoryBreakdown.map((item, index) => (
-                        <tr key={index} className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-                          <td className={`py-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.category}</td>
+                        <tr key={index} className="border-b border-gray-200 dark:border-gray-700">
+                          <td className="py-2 text-gray-900 dark:text-white">{item.category}</td>
                           <td className="py-2">
                             <span className={`px-2 py-1 text-xs rounded ${
                               item.type === 'income' 
@@ -228,10 +226,10 @@ export const ReportsManager = () => {
                               {item.type}
                             </span>
                           </td>
-                          <td className={`text-right py-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          <td className="text-right py-2 text-gray-900 dark:text-white">
                             {formatCurrency(item.total, filters.currency)}
                           </td>
-                          <td className={`text-right py-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.count}</td>
+                          <td className="text-right py-2 text-gray-900 dark:text-white">{item.count}</td>
                         </tr>
                       ))}
                     </tbody>

@@ -38,11 +38,13 @@ export const useAnalytics = (period = 'monthly') => {
     const categoryChartData = useMemo(() => {
         if (!analytics?.categoryBreakdown) return [];
         
-        return analytics.categoryBreakdown.map(item => ({
-            name: item.category,
-            value: parseFloat(item.expense),
-            income: parseFloat(item.income)
-        }));
+        return analytics.categoryBreakdown
+            .filter(item => parseFloat(item.expense) > 0)
+            .map(item => ({
+                name: item.category,
+                value: parseFloat(item.expense),
+                income: parseFloat(item.income)
+            }));
     }, [analytics]);
 
     const monthlyTrendData = useMemo(() => {

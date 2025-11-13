@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
-
 const Navbar = () => {
     const { user, logout, hasRole } = useAuth();
-    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -61,15 +58,8 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Right side - Theme toggle and user info */}
+                    {/* Right side - User info */}
                     <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0 ml-auto">
-                        <button
-                            onClick={toggleTheme}
-                            className="p-1.5 sm:p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                        >
-                            {theme === 'dark' ? '🌞' : '🌙'}
-                        </button>
-
                         {/* User info - hidden on mobile */}
                         <div className="hidden sm:flex items-center space-x-1 lg:space-x-2">
                             <div className="text-right">

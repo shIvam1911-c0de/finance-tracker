@@ -29,14 +29,9 @@ if (process.env.NODE_ENV === 'production') {
 app.use(helmet());
 
 // CORS configuration
-const allowedOrigins = [
-    'http://localhost:5173',
-    'https://finance-tracker-snowy-pi.vercel.app'
-];
-
-if (process.env.FRONTEND_URL) {
-    allowedOrigins.push(process.env.FRONTEND_URL);
-}
+const allowedOrigins = process.env.FRONTEND_URL 
+    ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+    : ['http://localhost:5173'];
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -46,7 +41,9 @@ app.use(cors({
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Body parsing middleware

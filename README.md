@@ -229,7 +229,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ✅ **Production-Ready Architecture**  
 ✅ **Modern React Best Practices**  
 
-live link : https://finance-tracker-snowy-pi.vercel.app/
+live link : https://finance-tracker-delta-two.vercel.app/
 
 ---
 
